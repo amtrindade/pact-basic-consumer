@@ -12,6 +12,31 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.source>1.8</maven.compiler.source>
 	</properties>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>au.com.dius.pact.provider</groupId>
+				<artifactId>maven</artifactId>
+				<version>${pact.version}</version>
+				<configuration>
+					<serviceProviders>
+						<serviceProvider>
+							<name>Tasks</name>
+							<protocol>http</protocol>
+							<host>localhost</host>
+							<port>8005</port>
+							<path>/</path>							
+						</serviceProvider>
+					</serviceProviders>
+					<pactBrokerUrl>http://localhost:9080</pactBrokerUrl>
+					<pactBrokerUsername>user1</pactBrokerUsername>
+					<pactBrokerPassword>userpasswd</pactBrokerPassword>
+					<trimSnapshot>true</trimSnapshot>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 	<dependencies>
 		<dependency>
