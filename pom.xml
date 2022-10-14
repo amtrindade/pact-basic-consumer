@@ -26,7 +26,8 @@
 							<protocol>http</protocol>
 							<host>localhost</host>
 							<port>8005</port>
-							<path>/</path>							
+							<path>/</path>
+							<stateChangeUrl>http://localhost:8005/todo/pactStateChange</stateChangeUrl>							
 						</serviceProvider>
 					</serviceProviders>
 					<pactBrokerUrl>http://localhost:9080</pactBrokerUrl>
