@@ -29,11 +29,22 @@
 							<path>/</path>
 							<stateChangeUrl>http://localhost:8005/todo/pactStateChange</stateChangeUrl>							
 						</serviceProvider>
+						<serviceProvider>
+							<name>Barriga</name>
+							<protocol>https</protocol>
+							<host>barrigarest.wcaquino.me</host>
+							<port>443</port>
+							<path>/</path>
+							<stateChangeUrl>http://localhost:8005/barrigaPactStateChange</stateChangeUrl>
+						</serviceProvider>
 					</serviceProviders>
 					<pactBrokerUrl>http://localhost:9080</pactBrokerUrl>
 					<pactBrokerUsername>user1</pactBrokerUsername>
 					<pactBrokerPassword>userpasswd</pactBrokerPassword>
 					<trimSnapshot>true</trimSnapshot>
+					<configuration>
+						<pact.verifier.publishResults>true</pact.verifier.publishResults>
+					</configuration>	
 				</configuration>
 			</plugin>
 		</plugins>

@@ -1,12 +1,12 @@
-package br.ce.wcaquino.consumer.tasks.pact;
+package br.ce.wcaquino.consumer.tasks.pact.barriga;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
+import org.hamcrest.CoreMatchers;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -17,51 +17,46 @@ import au.com.dius.pact.consumer.junit.PactProviderRule;
 import au.com.dius.pact.consumer.junit.PactVerification;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
-import br.ce.wcaquino.consumer.tasks.model.Task;
-import br.ce.wcaquino.consumer.tasks.service.TasksConsumer;
+import br.ce.wcaquino.consumer.barriga.service.BarrigaConsumer;
 
-public class GetTaskByIdTest {
+public class LoginTest {
 	
 	@Rule
-	public PactProviderRule mockProvider = new PactProviderRule("Tasks", this);
+	public PactProviderRule mockProvider = new PactProviderRule("Barriga", this);
 	
 	@Pact(consumer = "BasicConsumer")
 	public RequestResponsePact createPact(PactDslWithProvider builder) {
-		DslPart body = new PactDslJsonBody()
-				.numberType("id", 1L)
-				.stringType("task")
-				.stringType("dueDate");
+		DslPart bodyRequest = new PactDslJsonBody()
+				.stringType("email", "bozo@mail.com")
+				.stringType("senha", "a");
+		
+		DslPart bodyResponse = new PactDslJsonBody()
+				.stringType("token");
 						
 		return builder
-				.given("There is a task with id = 1")
-				.uponReceiving("Retrieve Task #1")
-					.path("/todo/1")
-					.method("GET")
+				.given("Your user is created")
+				.uponReceiving("Signin with a valid user")
+					.path("/signin")
+					.method("POST")
+					.body(bodyRequest)
 				.willRespondWith()
 					.status(200)
-					.body(body)
+					.body(bodyResponse)
 				.toPact();
 	}
 	
 	@Test
 	@PactVerification
-	public void test() throws ClientProtocolException, IOException {
+	public void shouldSignin() throws ClientProtocolException, IOException {
 		//Arrange
-		TasksConsumer consumer = new TasksConsumer(mockProvider.getUrl());
+		BarrigaConsumer consumer = new BarrigaConsumer(mockProvider.getUrl());
 		System.out.println(mockProvider.getUrl());
 		
 		//Act
-		Task task = consumer.getTask(1L);
-		System.out.println(task);
-		
+		String token = consumer.login("bozo@mail.com", "a");
+				
 		//Assert
-		assertThat(task.getId(), is(notNullValue()));
-		assertThat(task.getId(), is(1L));
-		assertThat(task.getTask(), is(notNullValue()));
+		assertThat(token, CoreMatchers.is(notNullValue()));
 	}
-	
 
 }
-
-
-
