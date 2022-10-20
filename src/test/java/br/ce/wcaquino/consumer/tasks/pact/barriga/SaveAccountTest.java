@@ -16,7 +16,7 @@ import au.com.dius.pact.core.model.RequestResponsePact;
 import br.ce.wcaquino.consumer.barriga.service.BarrigaConsumer;
 
 public class SaveAccountTest {
-	private final String TOKEN = "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ODQ2fQ.T0Zmoerb0vE8Zt0a0VMuLFDcYY5RY5Kni_4prZHqGnE";
+	private final String TOKEN = "JWT invalid";
 	
 	@Test
 	public void test() {
@@ -31,11 +31,12 @@ public class SaveAccountTest {
 		RequestResponsePact pact = ConsumerPactBuilder
 				.consumer("BasicConsumer")
 				.hasPactWith("Barriga")
-				.given("There is no account with name 'Acc test'")
+				.given("I have a valid token")
 				.uponReceiving("Insert account 'Acc test'")
 					.path("/contas")
 					.method("POST")
-					.matchHeader("Authorization", "JWT .*", TOKEN)
+					//.matchHeader("Authorization", "JWT .*", TOKEN)
+					.headerFromProviderState("Authorization", "${token}", TOKEN)
 					.body(requestBody)
 				.willRespondWith()
 					.status(201)
